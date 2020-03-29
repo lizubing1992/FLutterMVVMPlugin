@@ -32,7 +32,7 @@
     <!-- Add your actions here -->
     <action id="com.lizubing.mvvm.MvvmGeneratorAction"
             class="com.lizubing.fluttermvvm.MvvmGeneratorAction"
-            text="Translate"
+            text="FlutterMVVMGenerator"
             description="help you to create contract of MVVM">
       <add-to-group group-id="GenerateGroup" anchor="first"/>
       <keyboard-shortcut keymap="$default" first-keystroke="meta 1"/>

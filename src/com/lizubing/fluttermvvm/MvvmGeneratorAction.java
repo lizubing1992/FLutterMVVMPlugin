@@ -57,7 +57,7 @@ public class MvvmGeneratorAction extends AnAction {
                         "\n/// @desc TODO" +
                         "\n /// @time %s" +
                         "\n /// @author %s" +
-                        "abstract class ViewModel implements ICommonViewModel {" +
+                        "\nabstract class ViewModel implements ICommonViewModel {" +
                         "\n" +
                         "}" +
                         "\n" +
@@ -200,12 +200,12 @@ public class MvvmGeneratorAction extends AnAction {
                 "\n   Widget buildWidget(BuildContext context,%sViewModel viewModel){" +
                 "\n       //TODO: implement buildWidget " +
                 "\n       return  Container();" +
-                "\n   " +
+                "\n   }" +
                 "\n\n @override\n" +
                         "  createViewModel() {\n" +
                         "    return %sViewModel();\n" +
                         "  }"+
-                "}\n\n   @override" +
+                "\n\n   @override" +
                 "\n   void queryData(%sViewModel viewModel){" +
                 "\n       //TODO: implement queryData " +
                 "\n   }" +
