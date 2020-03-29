@@ -53,18 +53,11 @@ public class MvvmGeneratorAction extends AnAction {
                 String modelName = className.substring(0, className.indexOf("Contract"));
                 String modelFileName = fileName.substring(0, fileName.indexOf("_contract"));
                 String currentUser = System.getProperty("user.name");
-                String contractContent = String.format("import 'package:flutter_mvp/model/i_model.dart';" +
-                        "\nimport 'package:flutter_mvp/presenter/i_presenter.dart';" +
-                        "\nimport 'package:flutter_mvp/view/i_view.dart';" +
+                String contractContent = String.format("import 'package:dahuo_flutter/base/common/common_contract.dart';" +
                         "\n/// @desc TODO" +
                         "\n /// @time %s" +
                         "\n /// @author %s" +
-                        "\n abstract class View implements ICommonView {" +
-                        "\n" +
-                        "}" +
-                        "\n" +
-                        "\n" +
-                        "abstract class Presenter implements ICommonPresenter {" +
+                        "abstract class ViewModel implements ICommonViewModel {" +
                         "\n" +
                         "}" +
                         "\n" +
@@ -126,7 +119,9 @@ public class MvvmGeneratorAction extends AnAction {
         file.createNewFile();
         BufferedWriter writer = new BufferedWriter(new FileWriter(file));
         String currentUser = System.getProperty("user.name");
-        String content = String.format("import 'package:flutter_mvp/model/abstract_model.dart';" +
+        String content = String.format("import 'package:dahuo_flutter/base/common/common_model.dart';" +
+                "\nimport 'package:dahuo_flutter/base/api.dart';"+
+                "\nimport 'package:flutter_common_utils/http/http_manager.dart';"+
                 "\nimport 'package:%s/%s_contract.dart';" +
                 "\n\n\n/// @desc TODO" +
                 "\n /// @time %s" +
@@ -134,9 +129,9 @@ public class MvvmGeneratorAction extends AnAction {
                 "\n class %sModel extends CommonModel implements Model {" +
                 "\n   @override" +
                 "\n   void dispose(){" +
-                "\n       //TODO: implement dispose " +
-                "\n   " +
-                "}\n}", basePackage, fileName, this.sdf.format(new Date()), currentUser, modelName, modelName);
+                "\n        HttpManager().cancel(tag);" +
+                "\n         " +
+                "}\n}", basePackage, fileName, this.sdf.format(new Date()), currentUser, modelName);
         writer.write(content);
         writer.flush();
         writer.close();
@@ -153,13 +148,13 @@ public class MvvmGeneratorAction extends AnAction {
         file.createNewFile();
         BufferedWriter writer = new BufferedWriter(new FileWriter(file));
         String currentUser = System.getProperty("user.name");
-        String content = String.format("import 'package:flutter_mvp/presenter/abstract_presenter.dart';" +
+        String content = String.format("import 'package:dahuo_flutter/base/common/common_viewmodel.dart';" +
                 "\nimport 'package:%s/%s_contract.dart';" +
                 "\nimport 'package:%s/%s_model.dart';" +
                 "\n\n\n/// @desc TODO" +
                 "\n /// @time %s" +
                 "\n /// @author %s" +
-                "\n class %sPresenter extends CommonPresenter<View, Model> implements Presenter {" +
+                "\n class %sViewModel extends CommonViewModel<Model> implements ViewModel {" +
                 "\n\n   @override" +
                 "\n   Model createModel(){" +
                 "\n       return %sModel();" +
@@ -182,32 +177,40 @@ public class MvvmGeneratorAction extends AnAction {
         BufferedWriter writer = new BufferedWriter(new FileWriter(file));
         String currentUser = System.getProperty("user.name");
         String content = String.format("import 'package:flutter/material.dart';" +
-                "\nimport 'package:%s/%s_contract.dart';" +
-                "\nimport 'package:%s/%s_presenter.dart';" +
+                "\nimport 'package:dahuo_flutter/base/router/router.dart';"+
+                "\nimport 'package:%s/%s_viewmodel.dart';" +
                 "\n\n\n/// @desc TODO" +
                 "\n /// @time %s" +
                 "\n /// @author %s" +
-                "\n class %s extends LcfarmWidget{" +
-                "\n\n   %s({Object arguments}) : super(arguments: arguments);" +
-                "\n\n   @override\n   LcfarmWidgetState getState(){" +
+                "\n class %s extends DHWidget{" +
+                "\n static const String router = Router.scheme + \"%s\";"+
+                "\n\n   %s({Object arguments}) : super(arguments: arguments,routerName: router);" +
+                "\n\n   @override\n   DHWidgetState getState(){" +
                 "\n       return  _%sState();" +
                 "\n   }" +
                 "\n}" +
-                "\nclass _%sState extends LcfarmWidgetState<Presenter,%s> implements View {" +
+                "\nclass _%sState extends DHWidgetState<%s,%sViewModel> {" +
+                "\n @override\n" +
+                        "  void initState() {\n" +
+                        "    super.initState();\n" +
+                        "    setAppbar(\n" +
+                        "        title: \"\");\n" +
+                        "  }"+
                 "\n\n   @override" +
-                "\n   Widget buildWidget(BuildContext context){" +
+                "\n   Widget buildWidget(BuildContext context,%sViewModel viewModel){" +
                 "\n       //TODO: implement buildWidget " +
                 "\n       return  Container();" +
                 "\n   " +
+                "\n\n @override\n" +
+                        "  createViewModel() {\n" +
+                        "    return %sViewModel();\n" +
+                        "  }"+
                 "}\n\n   @override" +
-                "\n   void queryData(){" +
+                "\n   void queryData(%sViewModel viewModel){" +
                 "\n       //TODO: implement queryData " +
                 "\n   }" +
-                "\n\n   @override" +
-                "\n   Presenter createPresenter(){" +
-                "\n       return  %sPresenter();" +
-                "\n   }" +
-                "\n}", basePackage, fileName, basePackage, fileName, this.sdf.format(new Date()), currentUser, modelName, modelName, modelName, modelName, modelName, modelName);
+                "\n}", basePackage, fileName, this.sdf.format(new Date()), currentUser, fileName,
+                modelName, modelName,modelName, modelName, modelName,modelName,modelName,modelName, modelName);
         writer.write(content);
         writer.flush();
         writer.close();
