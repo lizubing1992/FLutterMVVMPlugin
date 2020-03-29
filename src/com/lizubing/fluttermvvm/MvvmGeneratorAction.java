@@ -209,7 +209,7 @@ public class MvvmGeneratorAction extends AnAction {
                 "\n   void queryData(%sViewModel viewModel){" +
                 "\n       //TODO: implement queryData " +
                 "\n   }" +
-                "\n}", basePackage, fileName, this.sdf.format(new Date()), currentUser, fileName,
+                "\n}", basePackage, fileName, this.sdf.format(new Date()), currentUser, modelName,
                 modelName, modelName,modelName, modelName, modelName,modelName,modelName,modelName, modelName);
         writer.write(content);
         writer.flush();
